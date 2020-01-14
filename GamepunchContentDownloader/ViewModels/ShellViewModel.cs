@@ -119,26 +119,25 @@ namespace GamepunchContentDownloader.ViewModels
             }
 
             string contentUrl = "";
-
-            switch (SelectedValue)
-            {
-                case "GamePunch Jailbreak":
-                    contentUrl = "http://glow.site.nfoservers.com/server/maps/";
-                    break;
-                case "GamePunch Minigames":
-                    contentUrl = "http://gpmg.site.nfoservers.com/server/maps/";
-                    break;
-                default:
-                    return;
-            }
-
             CanDownload = false;
             ProgressCircleVisibility = Visibility.Visible;
             List<string> urls;
 
             try
             {
-                urls = await scraper.ScrapeWebsite(contentUrl); 
+                switch (SelectedValue)
+                {
+                    case "GamePunch Jailbreak":
+                        contentUrl = "http://glow.site.nfoservers.com/server/maps/";
+                        break;
+                    case "GamePunch Minigames":
+                        contentUrl = "http://gpmg.site.nfoservers.com/server/maps/";
+                        break;
+                    default:
+                        return;
+                }
+
+                urls = await scraper.ScrapeForBzip2(contentUrl);
             }
             catch (Exception e)
             {

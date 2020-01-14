@@ -22,7 +22,7 @@ namespace GamepunchContentDownloader.Service
         /// Scrapes the website based on the HTML
         /// </summary>
         /// <returns>A Dictionary containing the quenstion and answer</returns>
-        public async Task<List<string>> ScrapeWebsite(string url)
+        public async Task<List<string>> ScrapeForBzip2(string url)
         {
             // Create new List object
             List<string> urls = new List<string>();
@@ -34,7 +34,7 @@ namespace GamepunchContentDownloader.Service
             Regex regex = new Regex("\"(.*?)\"");
 
             // Create and check nodes
-            HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("//td[contains(@class, 'indexcolname')]");
+            HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("//a");
 
             if (nodes == null)
             {
@@ -44,9 +44,9 @@ namespace GamepunchContentDownloader.Service
             // Parse the terms
             foreach (var node in nodes)
             {
-                Match match = regex.Match(node.InnerHtml);
+                Match match = regex.Match(node.OuterHtml);
 
-                if (node.InnerHtml.Contains("Parent Directory") || match.Value.Contains("size") || String.IsNullOrEmpty(match.Value))
+                if (String.IsNullOrEmpty(match.Value) || !match.Value.Contains("bz2"))
                 {
                     continue;
                 }

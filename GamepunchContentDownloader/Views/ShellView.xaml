@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:GamepunchContentDownloader.Views"
              mc:Ignorable="d"
              Height="450" Width="800"
+             Title="Gamepunch Content Downloader"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
