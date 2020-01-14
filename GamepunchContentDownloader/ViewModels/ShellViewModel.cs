@@ -126,7 +126,7 @@ namespace GamepunchContentDownloader.ViewModels
                     contentUrl = "http://glow.site.nfoservers.com/server/maps/";
                     break;
                 case "GamePunch Minigames":
-                    contentUrl = "http://gmpg.site.nfoservers.com/server/maps/";
+                    contentUrl = "http://gpmg.site.nfoservers.com/server/maps/";
                     break;
                 default:
                     return;
