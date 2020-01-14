@@ -74,7 +74,7 @@ namespace GamepunchContentDownloader.Models
         /// </summary>
         public string FileNameDecompressed
         {
-            get { return FileNameDecompressed; }
+            get { return fileNameDecompressed; }
         }
 
         /// <summary>
@@ -138,6 +138,7 @@ namespace GamepunchContentDownloader.Models
             Task decompressTask = Task.Run(() => BZip2.Decompress(fileStreamRead, fileStreamWrite, true));
             await decompressTask;
 
+            File.Delete($@"tmp\{FileName}");
             Status = "Done!";
         }
     }

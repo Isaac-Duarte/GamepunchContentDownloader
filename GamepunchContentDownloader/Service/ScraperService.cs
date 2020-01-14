@@ -13,8 +13,6 @@ namespace GamepunchContentDownloader.Service
     {
         private HttpClient client;
 
-        public string Name;
-
         public ScraperService()
         {
             client = new HttpClient();
@@ -35,8 +33,16 @@ namespace GamepunchContentDownloader.Service
             //Create new Regex object
             Regex regex = new Regex("\"(.*?)\"");
 
+            // Create and check nodes
+            HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("//td[contains(@class, 'indexcolname')]");
+
+            if (nodes == null)
+            {
+                return urls;
+            }
+
             // Parse the terms
-            foreach (var node in document.DocumentNode.SelectNodes("//td[contains(@class, 'indexcolname')]"))
+            foreach (var node in nodes)
             {
                 Match match = regex.Match(node.InnerHtml);
 
