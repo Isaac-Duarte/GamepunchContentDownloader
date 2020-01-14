@@ -53,7 +53,11 @@
                  Grid.Column="1"
                  Margin="10"/>
         
-        <Button x:Name="Download" Grid.ColumnSpan="2" Grid.Row="1" IsEnabled="{Binding CanDownload}" Margin="10" >
+        <Button x:Name="Download"
+                Grid.ColumnSpan="2"
+                Grid.Row="1"
+                IsEnabled="{Binding CanDownload}"
+                Margin="10" >
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="Download" />
                 <TextBlock Margin="10 0 0 0">Download</TextBlock>
