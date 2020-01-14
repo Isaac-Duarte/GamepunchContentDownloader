@@ -72,13 +72,13 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <TextBlock Text="{Binding FileName}"  Grid.Column="0"/>
                         <ProgressBar Value="{Binding Progress}"
-                                     materialDesign:TransitionAssist.DisableTransitions="True"
-                                     Width="200" Height="13"
-                                     Margin="10 0 0 0"
-                                     Grid.Column="1" />
+                                         materialDesign:TransitionAssist.DisableTransitions="True"
+                                         Width="200" Height="13"
+                                         Margin="10 0 0 0"
+                                         Grid.Column="1" />
                         <TextBlock Text="{Binding Status}" HorizontalAlignment="Center" Foreground="White" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>
