@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace GamepunchContentDownloader.ViewModels
         private string selectedValue;
         private ObservableCollection<FileDownload> downloads;
         private ScraperService scraper;
+        private string outputPath;
 
         /// <summary>
         /// Constuctor for the shell view model
@@ -25,7 +27,7 @@ namespace GamepunchContentDownloader.ViewModels
         public ShellViewModel()
         {
             CanDownload = true;
-            SelectedValue = "Gamepunch Jailbreak";
+            SelectedValue = "GamePunch Jailbreak";
             scraper = new ScraperService();
             System.Net.ServicePointManager.DefaultConnectionLimit = 5;
         }
@@ -78,18 +80,38 @@ namespace GamepunchContentDownloader.ViewModels
         }
 
         /// <summary>
+        /// The output path for the content
+        /// </summary>
+        public string OutputPath
+        {
+            get { return outputPath; }
+            set
+            {
+                outputPath = value;
+                NotifyOfPropertyChange(() => OutputPath);
+            }
+        }
+
+        /// <summary>
         /// Download button click event
         /// </summary>
         public async void Download()
         {
+            if (!Directory.Exists(OutputPath))
+            {
+                OutputPath = "Not a valid directory!";
+                return;
+            }
+
             string contentUrl = "";
 
             switch (SelectedValue)
             {
-                case "Gamepunch Jailbreak":
+                case "GamePunch Jailbreak":
                     contentUrl = "http://glow.site.nfoservers.com/server/maps/";
                     break;
-                case "Gamepunch Minigames":
+                case "GamePunch Minigames":
+                    contentUrl = "http://gmpg.site.nfoservers.com/server/maps/";
                     break;
                 default:
                     return;
@@ -101,7 +123,12 @@ namespace GamepunchContentDownloader.ViewModels
 
             foreach (string url in urls)
             {
-                Downloads.Add(new FileDownload($"{contentUrl}/{url}", "out/"));
+                if (File.Exists($@"{OutputPath}\{Path.GetFileNameWithoutExtension(url)}"))
+                {
+                    continue;
+                }
+
+                Downloads.Add(new FileDownload($"{contentUrl}/{url}", $@"{OutputPath}\"));
             }
         }
     }

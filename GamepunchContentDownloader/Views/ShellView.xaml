@@ -23,32 +23,43 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ComboBox SelectedValue="{Binding SelectedValue}"
+                  IsEnabled="{Binding CanDownload}"
                   SelectedValuePath="Content" 
                   materialDesign:ComboBoxAssist.ShowSelectedItem="{Binding ElementName=DisplaySelectedItemCheckBox, Path=IsChecked}"
-                  Margin="10"
+                  Margin="10 8 0 0"
+                  VerticalAlignment="Center"
                   HorizontalAlignment="Left">
             
             <ComboBoxItem>
-                Gamepunch Jailbreak
+                GamePunch Jailbreak
             </ComboBoxItem>
 
             <ComboBoxItem>
-                Gamepunch Minigames
+                GamePunch  Minigames
             </ComboBoxItem>
         </ComboBox>
 
-        <Button x:Name="Download" Grid.Column="1" IsEnabled="{Binding CanDownload}" Margin="10" >
+        <TextBox materialDesign:HintAssist.Hint="Output path"
+                 Text="{Binding OutputPath}"
+                 IsEnabled="{Binding CanDownload}"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 VerticalAlignment="Center" 
+                 Grid.Column="1"
+                 Margin="10"/>
+        
+        <Button x:Name="Download" Grid.ColumnSpan="2" Grid.Row="1" IsEnabled="{Binding CanDownload}" Margin="10" >
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="Download" />
                 <TextBlock Margin="10 0 0 0">Download</TextBlock>
             </StackPanel>
         </Button>
 
-        <ListView x:Name="DownloadList" ItemsSource="{Binding Downloads}" Grid.ColumnSpan="2" Grid.Row="1">
+        <ListView x:Name="DownloadList" ItemsSource="{Binding Downloads}" Grid.ColumnSpan="3" Grid.Row="2">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
