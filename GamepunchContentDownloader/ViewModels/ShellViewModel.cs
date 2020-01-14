@@ -20,6 +20,7 @@ namespace GamepunchContentDownloader.ViewModels
         private ObservableCollection<FileDownload> downloads;
         private ScraperService scraper;
         private string outputPath;
+        private Visibility progressCircleVisibility;
 
         /// <summary>
         /// Constuctor for the shell view model
@@ -28,6 +29,7 @@ namespace GamepunchContentDownloader.ViewModels
         {
             CanDownload = true;
             SelectedValue = "GamePunch Jailbreak";
+            ProgressCircleVisibility = Visibility.Collapsed;
             scraper = new ScraperService();
             System.Net.ServicePointManager.DefaultConnectionLimit = 5;
         }
@@ -38,7 +40,7 @@ namespace GamepunchContentDownloader.ViewModels
         public bool CanDownload
         {
             get { return canDownload; }
-            set 
+            set
             {
                 canDownload = value;
                 NotifyOfPropertyChange(() => CanDownload);
@@ -51,8 +53,8 @@ namespace GamepunchContentDownloader.ViewModels
         public string SelectedValue
         {
             get { return selectedValue; }
-            set 
-            {   
+            set
+            {
                 selectedValue = value;
                 NotifyOfPropertyChange(() => SelectedValue);
             }
@@ -72,9 +74,9 @@ namespace GamepunchContentDownloader.ViewModels
 
                 return downloads;
             }
-            set 
+            set
             {
-                downloads = value; 
+                downloads = value;
                 NotifyOfPropertyChange(() => Downloads);
             }
         }
@@ -89,6 +91,19 @@ namespace GamepunchContentDownloader.ViewModels
             {
                 outputPath = value;
                 NotifyOfPropertyChange(() => OutputPath);
+            }
+        }
+
+        /// <summary>
+        /// If the maps are being loaded in from the scraper
+        /// </summary>
+        public Visibility ProgressCircleVisibility
+        {
+            get { return progressCircleVisibility; }
+            set
+            {
+                progressCircleVisibility = value;
+                NotifyOfPropertyChange(() => ProgressCircleVisibility);
             }
         }
 
@@ -118,8 +133,20 @@ namespace GamepunchContentDownloader.ViewModels
             }
 
             CanDownload = false;
+            ProgressCircleVisibility = Visibility.Visible;
+            List<string> urls;
 
-            List<string> urls =  await scraper.ScrapeWebsite(contentUrl);
+            try
+            {
+                urls = await scraper.ScrapeWebsite(contentUrl); 
+            }
+            catch (Exception e)
+            {
+                OutputPath = e.Message;
+                return;
+            }
+
+            ProgressCircleVisibility = Visibility.Collapsed;
 
             foreach (string url in urls)
             {

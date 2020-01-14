@@ -79,5 +79,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <ProgressBar 
+            Visibility="{Binding ProgressCircleVisibility}"
+            Grid.ColumnSpan="2" Grid.RowSpan="3"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            IsIndeterminate="True" />
     </Grid>
 </Window>
