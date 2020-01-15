@@ -28,7 +28,6 @@ namespace GamepunchContentDownloader.ViewModels
         /// </summary>
         public ShellViewModel()
         {
-            CanDownload = true;
             ProgressCircleVisibility = Visibility.Collapsed;
             scraper = new ScraperService();
             System.Net.ServicePointManager.DefaultConnectionLimit = 5;
@@ -43,6 +42,7 @@ namespace GamepunchContentDownloader.ViewModels
 
             ServerData = await dataService.GetServers("https://raw.githubusercontent.com/Isaac-Duarte/GamepunchContentDownloader/master/severdata.json");
             SelectedValue = ServerData?[0];
+            CanDownload = true;
             ProgressCircleVisibility = Visibility.Collapsed;
         }
 
