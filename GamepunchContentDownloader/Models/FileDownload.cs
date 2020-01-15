@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using GamepunchContentDownloader.Enums;
 using ICSharpCode.SharpZipLib.BZip2;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace GamepunchContentDownloader.Models
         private string url;
         private string fileName;
         private string fileNameDecompressed;
-        private string status;
+        private Status status;
         private string filePath;
         private int progress;
         private WebClient webClient;
@@ -29,7 +30,7 @@ namespace GamepunchContentDownloader.Models
             Url = url;
             filePath = outPath;
 
-            Status = "Pending";
+            Status = Status.Pending;
 
             if (!Directory.Exists("tmp"))
             {
@@ -80,13 +81,36 @@ namespace GamepunchContentDownloader.Models
         /// <summary>
         /// Status for the download.
         /// </summary>
-        public string Status
+        public Status Status
         { 
             get { return status; }
             set
             {
                 status = value;
                 NotifyOfPropertyChange(() => Status);
+                NotifyOfPropertyChange(() => FormattedStatus);
+            }
+        }
+
+        public string FormattedStatus
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case Status.Pending:
+                        return "Pending";
+                    case Status.Downloading:
+                        return $"Downloading {Progress}%";
+                    case Status.Decompressing:
+                        return "Decompressing";
+                    case Status.Done:
+                        return "Done!";
+                    case Status.Error:
+                        return "Error";
+                    default:
+                        return "Error";
+                }
             }
         }
 
@@ -119,7 +143,7 @@ namespace GamepunchContentDownloader.Models
         /// <param name="e"></param>
         public void webClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            Status = $"Downloading {e.ProgressPercentage}%";
+            Status = Status.Downloading;
             Progress = e.ProgressPercentage;
         }
 
@@ -130,7 +154,7 @@ namespace GamepunchContentDownloader.Models
         /// <param name="e"></param>
         public async void webClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            Status = "Decompressing";
+            Status = Status.Decompressing;
 
             try
             {
@@ -144,10 +168,10 @@ namespace GamepunchContentDownloader.Models
             }
             catch
             {
-                Status = "ERROR!";
+                Status = Status.Error;
             }
 
-            Status = "Done!";
+            Status = Status.Done;
         }
     }
 }

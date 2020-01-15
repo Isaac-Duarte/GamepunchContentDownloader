@@ -89,6 +89,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Enums\Status.cs" />
     <Compile Include="Models\FileDownload.cs" />
     <Compile Include="Models\ServerData.cs" />
     <Compile Include="Service\ScraperService.cs" />
