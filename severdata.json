@@ -1,10 +1,22 @@
 [
-  {
-    "Name": "GamePunch Jailbreak",
+  { 
+    "Name": "GamePunch Jailbreak", 
     "FastDlUrl": "http://glow.site.nfoservers.com/server/maps/"
   },
   {
-    "Name": "GamePunch Minigames",
+    "Name": "GamePunch Minigames", 
     "FastDlUrl": "http://gpmg.site.nfoservers.com/server/maps/"
+  },
+  {
+    "Name": "GamePunch SurfDM", 
+    "FastDlUrl": "http://gpsurf.site.nfoservers.com/server/maps/"
+  },
+  {
+    "Name": "GamePunch GunGame",
+    "FastDlUrl": "http://ggdm.site.nfoservers.com/server/maps/"
+  },
+  {
+    "Name": "GamePunch GunGame",
+    "FastDlUrl": "http://gptourney.site.nfoservers.com/server/maps/"
   }
 ]
