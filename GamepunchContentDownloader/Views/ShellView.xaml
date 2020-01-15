@@ -28,21 +28,18 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ComboBox SelectedValue="{Binding SelectedValue}"
+        <ComboBox ItemsSource="{Binding ServerData}"
+                  SelectedItem="{Binding SelectedValue}"
                   IsEnabled="{Binding CanDownload}"
-                  SelectedValuePath="Content" 
                   materialDesign:ComboBoxAssist.ShowSelectedItem="{Binding ElementName=DisplaySelectedItemCheckBox, Path=IsChecked}"
                   Margin="10 8 0 0"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Left">
-            
-            <ComboBoxItem>
-                GamePunch Jailbreak
-            </ComboBoxItem>
-
-            <ComboBoxItem>
-                GamePunch  Minigames
-            </ComboBoxItem>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
         </ComboBox>
 
         <TextBox materialDesign:HintAssist.Hint="Output path"

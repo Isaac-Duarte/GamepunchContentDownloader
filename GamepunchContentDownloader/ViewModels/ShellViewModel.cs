@@ -16,11 +16,12 @@ namespace GamepunchContentDownloader.ViewModels
     class ShellViewModel : PropertyChangedBase
     {
         private bool canDownload;
-        private string selectedValue;
+        private ServerData selectedValue;
         private ObservableCollection<FileDownload> downloads;
         private ScraperService scraper;
         private string outputPath;
         private Visibility progressCircleVisibility;
+        private ObservableCollection<ServerData> serverData;
 
         /// <summary>
         /// Constuctor for the shell view model
@@ -28,10 +29,21 @@ namespace GamepunchContentDownloader.ViewModels
         public ShellViewModel()
         {
             CanDownload = true;
-            SelectedValue = "GamePunch Jailbreak";
             ProgressCircleVisibility = Visibility.Collapsed;
             scraper = new ScraperService();
             System.Net.ServicePointManager.DefaultConnectionLimit = 5;
+
+            GetServerData();
+        }
+
+        private async void GetServerData()
+        {
+            ServerDataService dataService = new ServerDataService();
+            ProgressCircleVisibility = Visibility.Visible;
+
+            ServerData = await dataService.GetServers("https://raw.githubusercontent.com/Isaac-Duarte/GamepunchContentDownloader/master/severdata.json");
+            SelectedValue = ServerData?[0];
+            ProgressCircleVisibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -50,7 +62,7 @@ namespace GamepunchContentDownloader.ViewModels
         /// <summary>
         /// Selected Value for combo box
         /// </summary>
-        public string SelectedValue
+        public ServerData SelectedValue
         {
             get { return selectedValue; }
             set
@@ -108,6 +120,19 @@ namespace GamepunchContentDownloader.ViewModels
         }
 
         /// <summary>
+        /// Server Data for combo box
+        /// </summary>
+        public ObservableCollection<ServerData> ServerData
+        {
+            get { return serverData; }
+            set
+            {
+                serverData = value;
+                NotifyOfPropertyChange(() => ServerData);
+            }
+        }
+
+        /// <summary>
         /// Download button click event
         /// </summary>
         public async void Download()
@@ -118,26 +143,13 @@ namespace GamepunchContentDownloader.ViewModels
                 return;
             }
 
-            string contentUrl = "";
             CanDownload = false;
             ProgressCircleVisibility = Visibility.Visible;
             List<string> urls;
 
             try
             {
-                switch (SelectedValue)
-                {
-                    case "GamePunch Jailbreak":
-                        contentUrl = "http://glow.site.nfoservers.com/server/maps/";
-                        break;
-                    case "GamePunch Minigames":
-                        contentUrl = "http://gpmg.site.nfoservers.com/server/maps/";
-                        break;
-                    default:
-                        return;
-                }
-
-                urls = await scraper.ScrapeForBzip2(contentUrl);
+                urls = await scraper.ScrapeForBzip2(SelectedValue.FastDlUrl);
             }
             catch (Exception e)
             {
@@ -154,7 +166,7 @@ namespace GamepunchContentDownloader.ViewModels
                     continue;
                 }
 
-                Downloads.Add(new FileDownload($"{contentUrl}/{url}", $@"{OutputPath}\"));
+                Downloads.Add(new FileDownload($"{SelectedValue.FastDlUrl}/{url}", $@"{OutputPath}\"));
             }
         }
     }
