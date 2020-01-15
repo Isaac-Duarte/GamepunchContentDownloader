@@ -44,14 +44,12 @@ namespace GamepunchContentDownloader.Service
             // Parse the terms
             foreach (var node in nodes)
             {
-                Match match = regex.Match(node.OuterHtml);
-
-                if (String.IsNullOrEmpty(match.Value) || !match.Value.Contains("bz2"))
+                if (String.IsNullOrEmpty(node.InnerHtml) || !node.InnerHtml.Contains("bz2"))
                 {
                     continue;
                 }
 
-                urls.Add(match.Value.Replace("\"", ""));
+                urls.Add(node.InnerHtml);
             }
 
             return urls;

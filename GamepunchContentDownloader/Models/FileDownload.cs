@@ -132,13 +132,21 @@ namespace GamepunchContentDownloader.Models
         {
             Status = "Decompressing";
 
-            FileStream fileStreamRead = new FileStream($@"tmp\{FileName}", FileMode.Open);
-            FileStream fileStreamWrite = new FileStream($@"{filePath}\{FileNameDecompressed}", FileMode.Create);
+            try
+            {
+                FileStream fileStreamRead = new FileStream($@"tmp\{FileName}", FileMode.Open);
+                FileStream fileStreamWrite = new FileStream($@"{filePath}\{FileNameDecompressed}", FileMode.Create);
 
-            Task decompressTask = Task.Run(() => BZip2.Decompress(fileStreamRead, fileStreamWrite, true));
-            await decompressTask;
+                Task decompressTask = Task.Run(() => BZip2.Decompress(fileStreamRead, fileStreamWrite, true));
+                await decompressTask;
 
-            File.Delete($@"tmp\{FileName}");
+                File.Delete($@"tmp\{FileName}");
+            }
+            catch
+            {
+                Status = "ERROR!";
+            }
+
             Status = "Done!";
         }
     }
