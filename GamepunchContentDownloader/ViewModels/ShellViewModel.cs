@@ -15,13 +15,15 @@ namespace GamepunchContentDownloader.ViewModels
 {
     class ShellViewModel : PropertyChangedBase
     {
-        private bool canDownload;
         private ServerData selectedValue;
         private ObservableCollection<FileDownload> downloads;
         private ScraperService scraper;
         private string outputPath;
         private Visibility progressCircleVisibility;
         private ObservableCollection<ServerData> serverData;
+        private bool canLoad;
+        private bool canDownload;
+        private bool checkAll;
 
         /// <summary>
         /// Constuctor for the shell view model
@@ -42,8 +44,21 @@ namespace GamepunchContentDownloader.ViewModels
 
             ServerData = await dataService.GetServers("https://raw.githubusercontent.com/Isaac-Duarte/GamepunchContentDownloader/master/severdata.json");
             SelectedValue = ServerData?[0];
-            CanDownload = true;
+            CanLoad = true;
             ProgressCircleVisibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Enables/Disables the download button
+        /// </summary>
+        public bool CanLoad
+        {
+            get { return canLoad; }
+            set
+            {
+                canLoad = value;
+                NotifyOfPropertyChange(() => CanLoad);
+            }
         }
 
         /// <summary>
@@ -133,9 +148,27 @@ namespace GamepunchContentDownloader.ViewModels
         }
 
         /// <summary>
+        /// Checks all of the items in the list
+        /// </summary>
+        public bool CheckAll
+        {
+            get { return checkAll; }
+            set
+            {
+                checkAll = value;
+                NotifyOfPropertyChange(() => CheckAll);
+
+                foreach (FileDownload download in Downloads)
+                {
+                    download.IsChecked = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// Download button click event
         /// </summary>
-        public async void Download()
+        public async void Start()
         {
             if (!Directory.Exists(OutputPath))
             {
@@ -143,7 +176,7 @@ namespace GamepunchContentDownloader.ViewModels
                 return;
             }
 
-            CanDownload = false;
+            CanLoad = false;
             ProgressCircleVisibility = Visibility.Visible;
             List<string> urls;
 
@@ -168,6 +201,25 @@ namespace GamepunchContentDownloader.ViewModels
 
                 Downloads.Add(new FileDownload($"{SelectedValue.FastDlUrl}/{url}", $@"{OutputPath}\"));
             }
+
+            CanDownload = true;
+        }
+
+        public void Download()
+        {
+            foreach (FileDownload download in Downloads.ToList())
+            {
+
+                if (!download.IsChecked)
+                {
+                    Downloads.Remove(download);
+                    continue;
+                }
+
+                download.StartDownload();
+            }
+
+            CanDownload = false;
         }
     }
 }

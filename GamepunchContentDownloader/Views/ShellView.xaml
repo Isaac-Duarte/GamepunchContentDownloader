@@ -14,8 +14,9 @@
              TextOptions.TextFormattingMode="Ideal" 
              TextOptions.TextRenderingMode="Auto"        
              Background="{DynamicResource MaterialDesignPaper}"
-             FontFamily="{DynamicResource MaterialDesignFont}">
-    
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             xmlns:cal="http://www.caliburnproject.org">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -25,12 +26,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ComboBox ItemsSource="{Binding ServerData}"
                   SelectedItem="{Binding SelectedValue}"
-                  IsEnabled="{Binding CanDownload}"
+                  IsEnabled="{Binding CanLoad}"
                   materialDesign:ComboBoxAssist.ShowSelectedItem="{Binding ElementName=DisplaySelectedItemCheckBox, Path=IsChecked}"
                   Margin="10 8 0 0"
                   VerticalAlignment="Center"
@@ -44,39 +46,70 @@
 
         <TextBox materialDesign:HintAssist.Hint="Output path"
                  Text="{Binding OutputPath}"
-                 IsEnabled="{Binding CanDownload}"
+                 IsEnabled="{Binding CanLoad}"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                  VerticalAlignment="Center" 
                  Grid.Column="1"
                  Margin="10"/>
-        
-        <Button x:Name="Download"
-                Grid.ColumnSpan="2"
-                Grid.Row="1"
+
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="1">
+            <Button x:Name="Start"
+                IsEnabled="{Binding CanLoad}"
+                Margin="10" >
+
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="File" />
+                    <TextBlock Margin="2 0 0 0">Get Files</TextBlock>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="Download"
                 IsEnabled="{Binding CanDownload}"
                 Margin="10" >
-            <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Kind="Download" />
-                <TextBlock Margin="10 0 0 0">Download</TextBlock>
-            </StackPanel>
-        </Button>
 
-        <ListView x:Name="DownloadList" ItemsSource="{Binding Downloads}" Grid.ColumnSpan="3" Grid.Row="2">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Download" />
+                    <TextBlock Margin="2 0 0 0">Download</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        
+        <CheckBox HorizontalAlignment="Left"
+                  IsChecked="{Binding CheckAll}"
+                  IsEnabled="{Binding CanDownload}"
+                  Margin="8------ 0 0 0" Grid.Row="2"
+                  Grid.ColumnSpan="4">
+            Check All
+        </CheckBox>
+        
+        <ListView x:Name="DownloadList" ItemsSource="{Binding Downloads}" Grid.ColumnSpan="3" Grid.Row="3">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding FileName}"  Grid.Column="0"/>
+                        <CheckBox Style="{StaticResource MaterialDesignCheckBox}" 
+                                  VerticalAlignment="Center" 
+                                  Margin="0 0 10 0" 
+                                  Grid.Column="0"
+                                  IsChecked="{Binding IsChecked}"/>
+
+                        <TextBlock Text="{Binding FileName}" VerticalAlignment="Center" Grid.Column="1"/>
                         <ProgressBar Value="{Binding Progress}"
                                          materialDesign:TransitionAssist.DisableTransitions="True"
+                                         VerticalAlignment="Center"
                                          Width="200" Height="13"
                                          Margin="10 0 0 0"
-                                         Grid.Column="1" />
-                        <TextBlock Text="{Binding FormattedStatus}" HorizontalAlignment="Center" Foreground="White" Grid.Column="1"/>
+                                         Grid.Column="2" />
+                        <TextBlock Text="{Binding FormattedStatus}" 
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" 
+                                   Foreground="White" 
+                                   Grid.Column="2"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -84,7 +117,7 @@
 
         <ProgressBar 
             Visibility="{Binding ProgressCircleVisibility}"
-            Grid.ColumnSpan="2" Grid.RowSpan="3"
+            Grid.ColumnSpan="2" Grid.RowSpan="4"
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             IsIndeterminate="True" />
     </Grid>

@@ -20,6 +20,7 @@ namespace GamepunchContentDownloader.Models
         private Status status;
         private string filePath;
         private int progress;
+        private bool isCheceked;
         private WebClient webClient;
 
         /// <summary>
@@ -36,7 +37,10 @@ namespace GamepunchContentDownloader.Models
             {
                 Directory.CreateDirectory("tmp");
             }
+        }
 
+        public void StartDownload()
+        {
             using (webClient = new WebClient())
             {
                 webClient.DownloadProgressChanged += webClient_DownloadProgressChanged;
@@ -44,6 +48,7 @@ namespace GamepunchContentDownloader.Models
                 webClient.DownloadFileAsync(new Uri(url), $@"tmp\{FileName}");
             }
         }
+
 
         /// <summary>
         /// The URL of the file
@@ -133,6 +138,19 @@ namespace GamepunchContentDownloader.Models
             {
                 progress = value;
                 NotifyOfPropertyChange(() => Progress);
+            }
+        }
+
+        /// <summary>
+        /// Checkbox for each item
+        /// </summary>
+        public bool IsChecked
+        {
+            get { return isCheceked; }
+            set
+            {
+                isCheceked = value;
+                NotifyOfPropertyChange(() => IsChecked);
             }
         }
 
