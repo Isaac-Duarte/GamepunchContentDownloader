@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GamepunchContentDownloader.Models
 {
@@ -31,7 +32,7 @@ namespace GamepunchContentDownloader.Models
             Url = url;
             filePath = outPath;
 
-            Status = Status.Pending;
+            Status = Status.Waiting;
 
             if (!Directory.Exists("tmp"))
             {
@@ -41,6 +42,8 @@ namespace GamepunchContentDownloader.Models
 
         public void StartDownload()
         {
+            Status = Status.Pending;
+
             using (webClient = new WebClient())
             {
                 webClient.DownloadProgressChanged += webClient_DownloadProgressChanged;
@@ -94,15 +97,21 @@ namespace GamepunchContentDownloader.Models
                 status = value;
                 NotifyOfPropertyChange(() => Status);
                 NotifyOfPropertyChange(() => FormattedStatus);
+                NotifyOfPropertyChange(() => CheckBoxVisibility);
             }
         }
 
+        /// <summary>
+        /// Formats the status enum for wpf
+        /// </summary>
         public string FormattedStatus
         {
             get
             {
                 switch (Status)
                 {
+                    case Status.Waiting:
+                        return "Waiting";
                     case Status.Pending:
                         return "Pending";
                     case Status.Downloading:
@@ -151,6 +160,24 @@ namespace GamepunchContentDownloader.Models
             {
                 isCheceked = value;
                 NotifyOfPropertyChange(() => IsChecked);
+            }
+        }
+
+        /// <summary>
+        /// Visibility
+        /// </summary 
+        public Visibility CheckBoxVisibility
+        {
+            get
+            {
+                if (Status == Status.Waiting)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
             }
         }
 

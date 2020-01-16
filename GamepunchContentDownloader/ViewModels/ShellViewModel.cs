@@ -207,8 +207,6 @@ namespace GamepunchContentDownloader.ViewModels
                 return;
             }
 
-            ProgressCircleVisibility = Visibility.Collapsed;
-
             foreach (string url in urls)
             {
                 if (File.Exists($@"{OutputPath}\{Path.GetFileNameWithoutExtension(url)}"))
@@ -219,10 +217,27 @@ namespace GamepunchContentDownloader.ViewModels
                 Downloads.Add(new FileDownload($"{SelectedValue.FastDlUrl}/{url}", $@"{OutputPath}\"));
             }
 
+            ProgressCircleVisibility = Visibility.Collapsed;
+
             CanDownload = true;
+        } 
+            /// <summary>
+            /// Handles event for the download button
+            /// </summary>
+            public async void Download()
+        {
+            ProgressCircleVisibility = Visibility.Visible;
+
+            Task downloadTask = Task.Run(() => download());
+            await downloadTask;
+
+            ProgressCircleVisibility = Visibility.Collapsed;
         }
 
-        public void Download()
+        /// <summary>
+        /// Allows for async
+        /// </summary>
+        private void download()
         {
             foreach (FileDownload download in Downloads.ToList())
             {

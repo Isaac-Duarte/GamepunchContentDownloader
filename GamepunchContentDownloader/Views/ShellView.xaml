@@ -97,6 +97,7 @@
                                   VerticalAlignment="Center" 
                                   Margin="0 0 10 0" 
                                   Grid.Column="0"
+                                  Visibility="{Binding CheckBoxVisibility}"
                                   IsChecked="{Binding IsChecked}"/>
 
                         <TextBlock Text="{Binding FileName}" VerticalAlignment="Center" Grid.Column="1"/>

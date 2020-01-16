@@ -8,10 +8,11 @@ namespace GamepunchContentDownloader.Enums
 {
     enum Status
     {
-        Pending = 0,
-        Downloading = 1,
-        Decompressing = 2,
-        Done = 3,
-        Error = 4
+        Waiting = 0,
+        Pending = 1,
+        Downloading = 2,
+        Decompressing = 3,
+        Done = 4,
+        Error = 5
     }
 }
