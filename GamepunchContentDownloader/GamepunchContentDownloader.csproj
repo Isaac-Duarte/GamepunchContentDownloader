@@ -118,6 +118,7 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Enums\Status.cs" />
+    <Compile Include="Helpers\AsyncObservableCollection.cs" />
     <Compile Include="Models\FileDownload.cs" />
     <Compile Include="Models\ServerData.cs" />
     <Compile Include="Service\ScraperService.cs" />

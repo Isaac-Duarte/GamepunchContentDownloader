@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using GamepunchContentDownloader.Helpers;
 using GamepunchContentDownloader.Models;
 using GamepunchContentDownloader.Service;
 using System;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 
 namespace GamepunchContentDownloader.ViewModels
 {
@@ -17,6 +19,7 @@ namespace GamepunchContentDownloader.ViewModels
     {
         private ServerData selectedValue;
         private ObservableCollection<FileDownload> downloads;
+        private readonly object downloadsCollectionLock;
         private ScraperService scraper;
         private string outputPath;
         private Visibility progressCircleVisibility;
@@ -97,7 +100,7 @@ namespace GamepunchContentDownloader.ViewModels
             {
                 if (downloads == null)
                 {
-                    downloads = new ObservableCollection<FileDownload>();
+                    downloads = new AsyncObservableCollection<FileDownload>();
                 }
 
                 return downloads;
