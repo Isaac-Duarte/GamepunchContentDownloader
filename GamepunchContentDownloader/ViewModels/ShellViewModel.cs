@@ -71,6 +71,7 @@ namespace GamepunchContentDownloader.ViewModels
             {
                 canDownload = value;
                 NotifyOfPropertyChange(() => CanDownload);
+                NotifyOfPropertyChange(() => CheckAllVisibility);
             }
         }
 
@@ -162,6 +163,22 @@ namespace GamepunchContentDownloader.ViewModels
                 {
                     download.IsChecked = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Visibility for the checkall checkbox
+        /// </summary>
+        public Visibility CheckAllVisibility
+        {
+            get
+            {
+                if (CanDownload)
+                {
+                    return Visibility.Visible;
+                }
+
+                return Visibility.Collapsed;
             }
         }
 
